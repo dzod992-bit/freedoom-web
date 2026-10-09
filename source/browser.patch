@@ -1,0 +1,94 @@
+diff --git a/opl/opl.c b/opl/opl.c
+index e99821c..6bd5e55 100644
+--- a/opl/opl.c
++++ b/opl/opl.c
+@@ -28,7 +28,7 @@
+ 
+ //#define OPL_DEBUG_TRACE
+ 
+-#ifdef EMSCRIPTEN
++#ifdef __EMSCRIPTEN__
+ #include <emscripten.h>
+ #endif
+ 
+@@ -498,7 +498,7 @@ void OPL_Delay(uint64_t us)
+     while (!delay_data.finished)
+     {
+         SDL_CondWait(delay_data.cond, delay_data.mutex);
+-#ifdef EMSCRIPTEN
++#ifdef __EMSCRIPTEN__
+         // Use async sleep to avoid locking browser main thread
+         emscripten_sleep(us / 1000);
+ #endif
+diff --git a/src/doom/g_game.c b/src/doom/g_game.c
+index 4258712..41fb519 100644
+--- a/src/doom/g_game.c
++++ b/src/doom/g_game.c
+@@ -1760,6 +1760,12 @@ void G_DoSaveGame (void)
+ 
+     M_remove(savegame_file);
+     M_rename(temp_savegame_file, savegame_file);
++    #ifdef __EMSCRIPTEN__
++    {
++        extern void Web_SaveFinished(void);
++        Web_SaveFinished();
++    }
++    #endif
+ 
+     gameaction = ga_nothing;
+     M_StringCopy(savedescription, "", sizeof(savedescription));
+diff --git a/src/i_timer.c b/src/i_timer.c
+index 4ec6fb0..2fc490d 100644
+--- a/src/i_timer.c
++++ b/src/i_timer.c
+@@ -17,6 +17,9 @@
+ //
+ 
+ #include "SDL.h"
++#ifdef __EMSCRIPTEN__
++#include <emscripten.h>
++#endif
+ 
+ #include "i_timer.h"
+ #include "doomtype.h"
+@@ -62,7 +65,11 @@ int I_GetTimeMS(void)
+ 
+ void I_Sleep(int ms)
+ {
++    #ifdef __EMSCRIPTEN__
++    emscripten_sleep(ms);
++    #else
+     SDL_Delay(ms);
++    #endif
+ }
+ 
+ void I_WaitVBL(int count)
+diff --git a/src/i_video.c b/src/i_video.c
+index 6ff3b80..55b649a 100644
+--- a/src/i_video.c
++++ b/src/i_video.c
+@@ -265,7 +265,11 @@ static void SetShowCursor(boolean show)
+     {
+         // When the cursor is hidden, grab the input.
+         // Relative mode implicitly hides the cursor.
++        #ifdef __EMSCRIPTEN__
++        SDL_ShowCursor(show ? SDL_ENABLE : SDL_DISABLE);
++        #else
+         SDL_SetRelativeMouseMode(!show);
++        #endif
+         SDL_GetRelativeMouseState(NULL, NULL);
+     }
+ }
+@@ -1505,6 +1509,12 @@ void I_InitGraphics(void)
+     while (SDL_PollEvent(&dummy));
+ 
+     initialized = true;
++    #ifdef __EMSCRIPTEN__
++    {
++        extern void Web_GraphicsReady(void);
++        Web_GraphicsReady();
++    }
++    #endif
+ 
+     // Call I_ShutdownGraphics on quit
+ 

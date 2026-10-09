@@ -1,0 +1,6 @@
+{
+  "emscripten": "6.0.12",
+  "freedoom": "0.13.0",
+  "wad_sha256": "a8772e088847032510d97ba2312406a6998f21cbab44d4ff10696faa9c0ecd4b",
+  "engine_commit": "895f581c5d91497bdda0516612da803fe5843e28"
+}

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10110f">
+  <title>Freedoom — играть в браузере</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="style.css">
+  <script src="doom.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main>
+    <header><span class="eyebrow">CHOCOLATE DOOM / WEBASSEMBLY</span><span class="badge">SINGLE PLAYER</span></header>
+    <div class="heading"><h1>FREE<span>DOOM</span><small>PHASE 02</small></h1><p>Классика. Прямо в браузере.</p></div>
+    <section id="stage" aria-label="Игра Freedoom">
+      <canvas id="canvas" width="960" height="720" tabindex="0" aria-label="Экран игры"></canvas>
+      <div id="cover"><div class="crosshair" aria-hidden="true">+</div><p>32 уровня. Один выход — вперёд.</p></div>
+      <div id="mouse-prompt" hidden>
+        <p id="mouse-message" role="status">Нажмите, чтобы захватить мышь и продолжить игру.</p>
+        <button id="capture">Вернуться в игру</button>
+        <span id="mouse-hint">Курсор останется внутри игры · Esc — отпустить мышь</span>
+        <div id="browser-help" hidden>
+          <label for="game-address">Адрес игры для отдельного окна Edge или Chrome</label>
+          <input id="game-address" readonly aria-label="Адрес игры">
+          <button id="copy-address">Скопировать адрес игры</button>
+        </div>
+      </div>
+      <div id="toolbar"><button id="play" disabled>Загрузка…</button><span id="status" role="status">Загружаем движок и уровни…</span></div>
+    </section>
+    <div class="meta"><span id="storage" role="status">Подключаем сохранения…</span><span>Мышь захватывается по клику · Esc — отпустить</span></div>
+    <div class="controls" aria-label="Управление">
+      <span><kbd>W A S D</kbd> движение</span><span><kbd>Мышь</kbd> обзор</span><span><kbd>ЛКМ / Ctrl</kbd> огонь</span><span><kbd>Пробел</kbd> открыть</span><span><kbd>Shift</kbd> бег</span><span><kbd>1–7</kbd> оружие</span><span><kbd>F2</kbd> сохранить</span><span><kbd>F3</kbd> загрузить</span><span><kbd>Esc</kbd> меню</span>
+    </div>
+    <p class="note">Сохраните игру через F2. Сохранения хранятся в этом браузере для текущего адреса сайта.</p>
+    <details><summary>Журнал запуска</summary><pre id="log"></pre></details>
+    <footer><span>Chocolate Doom (GPL) + Freedoom (BSD)</span><nav><a href="licenses/Chocolate-Doom-GPL.txt">GPL</a><a href="licenses/Freedoom-BSD.txt">BSD</a><a href="source/">Исходники</a></nav></footer>
+  </main>
+</body>
+</html>
