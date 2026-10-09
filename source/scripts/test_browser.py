@@ -71,6 +71,7 @@ with sync_playwright() as p:
         angles.append(page.evaluate("doom._Web_GetViewAngle()"))
         assert page.evaluate("document.pointerLockElement === document.querySelector('canvas')"), 'Pointer escaped during rotation'
     assert all(a != b for a, b in zip(angles, angles[1:])), f'Camera stopped at screen edge: {angles}'
+    page.screenshot(path=str(out / 'playing.png'))
     # Losing lock must expose a working recapture button even in fullscreen.
     page.evaluate("document.exitPointerLock()")
     page.wait_for_function("!document.pointerLockElement && !document.querySelector('#mouse-prompt').hidden")
@@ -81,7 +82,7 @@ with sync_playwright() as p:
     page.keyboard.press('F2')
     page.wait_for_timeout(300)
     assert page.evaluate("document.pointerLockElement === document.querySelector('canvas')"), 'Game menu silently released pointer lock'
-    page.keyboard.press('F2')
+    page.keyboard.press('Escape')
     page.wait_for_timeout(300)
     # Release fullscreen/lock before menu tests; keyboard still targets the canvas.
     page.evaluate("document.exitPointerLock(); if(document.fullscreenElement) document.exitFullscreen();")
